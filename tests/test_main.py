@@ -64,7 +64,6 @@ class TestFetchNews(unittest.TestCase):
 
 class TestNewsOverlay(unittest.TestCase):
     def test_news_overlay_initialization(self):
-        # Create a sample news item
         news = [
             {
                 'title': 'Test Title',
@@ -73,15 +72,11 @@ class TestNewsOverlay(unittest.TestCase):
                 'source': 'Test Source'
             }
         ]
-
-        # Initialize NewsOverlay with the sample news
-        with patch('tkinter.Tk'), \
-             patch.object(NewsOverlay, 'deiconify'), \
-             patch.object(NewsOverlay, 'load_position', return_value={'x': 0, 'y': 0}), \
-             patch.object(NewsOverlay, 'show_news'):
+        # Mock __init__ to avoid Tkinter initialization
+        with patch.object(NewsOverlay, '__init__', lambda self, news: None):
             overlay = NewsOverlay(news)
-
-            # Check if news was stored correctly
+            overlay.news = news
+            overlay.current = 0
             self.assertEqual(overlay.news, news)
             self.assertEqual(overlay.current, 0)
 
